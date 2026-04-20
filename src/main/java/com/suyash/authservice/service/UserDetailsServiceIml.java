@@ -1,22 +1,28 @@
 package com.suyash.authservice.service;
 
 import com.suyash.authservice.entity.UserEntity;
+import com.suyash.authservice.model.UserDetailsDto;
 import com.suyash.authservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
 public class UserDetailsServiceIml  implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsServiceIml(UserRepository userRepository){
+    public UserDetailsServiceIml(UserRepository userRepository , PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -32,4 +38,24 @@ public class UserDetailsServiceIml  implements UserDetailsService {
         return new CustomUserDetails(user);
 
     }
+
+    public Optional<UserEntity> userExsits(UserDetailsDto userDetailsDto){
+        Optional<UserEntity> userObj = userRepository.findByUsername(userDetailsDto.getUsername());
+        return userObj;
+    }
+
+    public Boolean signUpUser(UserDetailsDto userDetailsDto){
+        if(userExsits(userDetailsDto).isPresent()){
+            return false;
+        }
+        userDetailsDto.setPassword(passwordEncoder.encode(userDetailsDto.getPassword()));
+        String userId = UUID.randomUUID().toString();
+        userRepository.save(new UserEntity(userId,
+                userDetailsDto.getUsername(),
+                userDetailsDto.getPassword(),
+                userDetailsDto.getEmail(),
+                new HashSet<>()));
+        return true;
+    }
+
 }
