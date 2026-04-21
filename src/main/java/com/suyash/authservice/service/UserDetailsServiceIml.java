@@ -1,5 +1,4 @@
 package com.suyash.authservice.service;
-
 import com.suyash.authservice.entity.UserEntity;
 import com.suyash.authservice.model.UserDetailsDto;
 import com.suyash.authservice.repository.UserRepository;
@@ -8,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,13 +37,13 @@ public class UserDetailsServiceIml  implements UserDetailsService {
 
     }
 
-    public Optional<UserEntity> userExsits(UserDetailsDto userDetailsDto){
+    public Optional<UserEntity> userExists(UserDetailsDto userDetailsDto){
         Optional<UserEntity> userObj = userRepository.findByUsername(userDetailsDto.getUsername());
         return userObj;
     }
 
     public Boolean signUpUser(UserDetailsDto userDetailsDto){
-        if(userExsits(userDetailsDto).isPresent()){
+        if(userExists(userDetailsDto).isPresent()){
             return false;
         }
         userDetailsDto.setPassword(passwordEncoder.encode(userDetailsDto.getPassword()));
