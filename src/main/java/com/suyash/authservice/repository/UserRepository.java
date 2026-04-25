@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity , Long> {
+public interface UserRepository extends CrudRepository<UserEntity , String> {
 
     Optional<UserEntity> findByUsername(String username);
 
