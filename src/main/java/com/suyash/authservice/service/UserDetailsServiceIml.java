@@ -1,5 +1,6 @@
 package com.suyash.authservice.service;
 import com.suyash.authservice.entity.UserEntity;
+import com.suyash.authservice.eventProducer.UserDetailsProducer;
 import com.suyash.authservice.model.UserDetailsDto;
 import com.suyash.authservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +18,12 @@ public class UserDetailsServiceIml  implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsProducer userDetailsProducer;
 
-    public UserDetailsServiceIml(UserRepository userRepository , PasswordEncoder passwordEncoder){
+    public UserDetailsServiceIml(UserRepository userRepository , PasswordEncoder passwordEncoder , UserDetailsProducer userDetailsProducer){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsProducer = userDetailsProducer;
     }
 
 
@@ -53,6 +56,8 @@ public class UserDetailsServiceIml  implements UserDetailsService {
                 userDetailsDto.getPassword(),
                 userDetailsDto.getEmail(),
                 new HashSet<>()));
+
+        userDetailsProducer.sendEventToKafka(userDetailsDto);
         return true;
     }
 
