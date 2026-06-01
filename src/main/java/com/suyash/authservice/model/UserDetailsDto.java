@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDetailsDto extends UserEntity {
 
-    private String username;
+    private String firstName;
 
     private String lastName;
 

@@ -40,8 +40,11 @@ public class AuthController {
             String jwtToken = jwtService.createToken(new HashMap<>() , userDetailsDto.getUsername());
             return ResponseEntity.ok(JwtResponseDTO.builder().accessToken(jwtToken).refreshToken(refreshToken.getToken()).build());
         }catch (Exception ex){
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Exception in User Service");
+                    .body(ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Exception in User Service");
         }
     }
 }
