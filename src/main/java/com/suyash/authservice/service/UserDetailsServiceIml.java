@@ -54,7 +54,6 @@ public class UserDetailsServiceIml  implements UserDetailsService {
         userRepository.save(new UserEntity(userId,
                 userDetailsDto.getUsername(),
                 userDetailsDto.getPassword(),
-                userDetailsDto.getEmail(),
                 new HashSet<>()));
 
         userDetailsProducer.sendEventToKafka(userDetailsDto);
