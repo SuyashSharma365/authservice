@@ -14,10 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthController.class);
+
 
     @Autowired
     private JwtService jwtService;
@@ -40,11 +47,9 @@ public class AuthController {
             String jwtToken = jwtService.createToken(new HashMap<>() , userDetailsDto.getUsername());
             return ResponseEntity.ok(JwtResponseDTO.builder().accessToken(jwtToken).refreshToken(refreshToken.getToken()).build());
         }catch (Exception ex){
-            ex.printStackTrace();
+            logger.error("Signup failed", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ex.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Exception in User Service");
+                    .body("Exception in User Service");
         }
     }
 }
