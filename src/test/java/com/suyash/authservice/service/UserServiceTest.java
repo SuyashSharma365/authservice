@@ -1,6 +1,7 @@
 package com.suyash.authservice.service;
 
 import com.suyash.authservice.entity.UserEntity;
+import com.suyash.authservice.eventProducer.UserDetailsProducer;
 import com.suyash.authservice.model.UserDetailsDto;
 import com.suyash.authservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,8 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private UserDetailsProducer userDetailsProducer;
 
     @Test
     public void shouldCreateUserSuccessfully(){
