@@ -3,10 +3,15 @@ package com.suyash.authservice.serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suyash.authservice.model.UserDetailsDto;
 import org.apache.kafka.common.serialization.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class UserDetailsSerializer implements Serializer<UserDetailsDto> {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserDetailsSerializer.class);
 
     @Override
     public void configure(Map<String , ?> configs , boolean isKey){
@@ -22,7 +27,7 @@ public class UserDetailsSerializer implements Serializer<UserDetailsDto> {
             returnValue = objectMapper.writeValueAsString(dto).getBytes();
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error("Failed to serialize UserDetailsDto", e);
         }
         return returnValue;
     }
