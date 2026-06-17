@@ -1,6 +1,7 @@
 package com.suyash.authservice.controller;
 
 import com.suyash.authservice.entity.RefreshToken;
+import com.suyash.authservice.entity.UserEntity;
 import com.suyash.authservice.model.UserDetailsDto;
 import com.suyash.authservice.response.JwtResponseDTO;
 import com.suyash.authservice.service.JwtService;
@@ -9,11 +10,13 @@ import com.suyash.authservice.service.UserDetailsServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,4 +55,18 @@ public class AuthController {
                     .body("Exception in User Service");
         }
     }
+
+    @GetMapping("/auth/v1/ping")
+    public ResponseEntity<String>ping(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(auth != null && auth.isAuthenticated()){
+            Optional<UserEntity> user = userDetailsServiceIml.findUserByUsername(auth.getName());
+            if(user.isPresent()){
+                return ResponseEntity.ok(user.get().getUserId());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+    }
+
 }

@@ -45,6 +45,11 @@ public class UserDetailsServiceIml  implements UserDetailsService {
         return userObj;
     }
 
+    public Optional<UserEntity> findUserByUsername(String userName){
+        Optional<UserEntity>userObj = userRepository.findByUsername(userName);
+        return userObj;
+    }
+
     public Boolean signUpUser(UserDetailsDto userDetailsDto){
         if(userExists(userDetailsDto).isPresent()){
             return false;
