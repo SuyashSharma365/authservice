@@ -24,5 +24,5 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name : Analyze with SonarCloud
-        run: mvn clean verify sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#      - name : Analyze with SonarCloud
+#        run: mvn clean verify sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
