@@ -56,7 +56,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/auth/v1/ping")
+    @GetMapping("/v1/ping")
     public ResponseEntity<String>ping(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
